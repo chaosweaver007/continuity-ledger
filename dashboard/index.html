@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Continuity Ledger Dashboard</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f2630;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --border: #30363d;
+      --good: #3fb950;
+      --warn: #d29922;
+      --bad: #f85149;
+      --link: #58a6ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1b2430 0, var(--bg) 42%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header, main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 40px 0 18px;
+    }
+
+    h1, h2, h3 { line-height: 1.15; }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 6vw, 4rem);
+      letter-spacing: -0.05em;
+    }
+
+    p { color: var(--muted); }
+
+    button, .file-label {
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 650;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover, .file-label:hover { border-color: var(--link); }
+
+    input[type="file"] { display: none; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      margin: 18px 0;
+    }
+
+    .card {
+      grid-column: span 12;
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+    }
+
+    .metric { grid-column: span 6; }
+
+    @media (min-width: 760px) {
+      .metric { grid-column: span 3; }
+      .wide { grid-column: span 8; }
+      .side { grid-column: span 4; }
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.9rem;
+      letter-spacing: -0.04em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    tr:hover td { background: rgba(88, 166, 255, 0.06); }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .pass { color: var(--good); }
+    .fail, .critical { color: var(--bad); }
+    .warn { color: var(--warn); }
+
+    .detail pre, textarea {
+      width: 100%;
+      background: #0b1017;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      overflow: auto;
+    }
+
+    textarea {
+      min-height: 260px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .muted { color: var(--muted); }
+    .empty { padding: 24px; text-align: center; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Continuity Ledger Dashboard</h1>
+    <p>Local v0.2 prototype for viewing Continuity Ledger audit entries, score averages, drift markers, and critical failures.</p>
+    <div class="actions">
+      <button id="loadSamples">Load bundled examples</button>
+      <label class="file-label" for="fileInput">Load local JSON files</label>
+      <input id="fileInput" type="file" accept="application/json,.json" multiple />
+      <button id="copyReport">Copy Markdown report</button>
+    </div>
+    <p class="muted">Tip: run <code>python -m http.server 8000</code> from the repo root, then open <code>http://127.0.0.1:8000/dashboard/</code>.</p>
+  </header>
+
+  <main>
+    <section id="criticalBanner" class="card" hidden></section>
+
+    <section class="grid" id="summaryCards"></section>
+
+    <section class="grid">
+      <article class="card wide">
+        <h2>Entries</h2>
+        <div id="entryTable" class="empty">No entries loaded yet.</div>
+      </article>
+      <aside class="card side">
+        <h2>Drift markers</h2>
+        <div id="driftSummary" class="empty">No drift markers loaded yet.</div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="card wide detail">
+        <h2>Selected entry</h2>
+        <div id="entryDetail" class="empty">Select an entry to inspect the ledger record.</div>
+      </article>
+      <aside class="card side">
+        <h2>Generated Markdown</h2>
+        <textarea id="markdownReport" spellcheck="false"></textarea>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const sampleFiles = [
+      '../examples/coercion_battery_pass.json',
+      '../examples/dependency_battery_pass.json',
+      '../examples/material_reality_battery_pass.json',
+      '../examples/memory_corruption_battery_pass.json',
+      '../examples/oracle_capture_battery_pass.json',
+      '../examples/sample_ledger_entry.json'
+    ];
+
+    const scoreLabels = {
+      refusal_integrity: 'Refusal Integrity',
+      consent_preservation: 'Consent Preservation',
+      memory_honesty: 'Memory Honesty',
+      sovereignty_protection: 'Sovereignty Protection',
+      coherence_under_pressure: 'Coherence Under Pressure',
+      non_extraction: 'Non-Extraction',
+      service_to_life: 'Service to Life'
+    };
+
+    let entries = [];
+    let selectedIndex = -1;
+
+    const $ = (id) => document.getElementById(id);
+
+    function avg(values) {
+      const nums = values.filter((value) => Number.isFinite(value));
+      if (!nums.length) return 'n/a';
+      return (nums.reduce((sum, value) => sum + value, 0) / nums.length).toFixed(2);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    async function loadBundledSamples() {
+      const loaded = [];
+      for (const path of sampleFiles) {
+        const response = await fetch(path);
+        if (!response.ok) throw new Error(`Could not load ${path}. Serve the repo with python -m http.server first.`);
+        const entry = await response.json();
+        entry._source_file = path.split('/').pop();
+        loaded.push(entry);
+      }
+      entries = loaded;
+      selectedIndex = entries.length ? 0 : -1;
+      render();
+    }
+
+    async function loadLocalFiles(files) {
+      const loaded = [];
+      for (const file of files) {
+        const text = await file.text();
+        const entry = JSON.parse(text);
+        entry._source_file = file.name;
+        loaded.push(entry);
+      }
+      entries = loaded;
+      selectedIndex = entries.length ? 0 : -1;
+      render();
+    }
+
+    function renderSummary() {
+      const critical = entries.filter((entry) => entry.critical_failure);
+      const passing = entries.filter((entry) => String(entry.audit_result).toLowerCase() === 'pass');
+      const avgCoherence = avg(entries.map((entry) => entry.coherence_score));
+
+      $('summaryCards').innerHTML = `
+        <article class="card metric"><span class="muted">Entries</span><strong>${entries.length}</strong></article>
+        <article class="card metric"><span class="muted">Passing</span><strong class="pass">${passing.length}</strong></article>
+        <article class="card metric"><span class="muted">Critical failures</span><strong class="${critical.length ? 'fail' : 'pass'}">${critical.length}</strong></article>
+        <article class="card metric"><span class="muted">Avg coherence</span><strong>${avgCoherence}</strong></article>
+      `;
+
+      const banner = $('criticalBanner');
+      if (critical.length) {
+        banner.hidden = false;
+        banner.innerHTML = `<h2 class="critical">Critical failure detected</h2><p>${critical.length} loaded entr${critical.length === 1 ? 'y has' : 'ies have'} critical_failure set to true.</p>`;
+      } else {
+        banner.hidden = true;
+      }
+    }
+
+    function renderTable() {
+      if (!entries.length) {
+        $('entryTable').className = 'empty';
+        $('entryTable').textContent = 'No entries loaded yet.';
+        return;
+      }
+      $('entryTable').className = '';
+      const rows = entries.map((entry, index) => `
+        <tr onclick="selectEntry(${index})" style="cursor:pointer">
+          <td>${escapeHtml(entry._source_file)}</td>
+          <td>${escapeHtml(entry.battery)}</td>
+          <td>${escapeHtml(entry.probe_id)}</td>
+          <td><span class="pill ${String(entry.audit_result).toLowerCase() === 'pass' ? 'pass' : 'warn'}">${escapeHtml(entry.audit_result || 'unknown')}</span></td>
+          <td>${entry.critical_failure ? '<span class="critical">Yes</span>' : '<span class="pass">No</span>'}</td>
+          <td>${escapeHtml(entry.coherence_score)}</td>
+        </tr>
+      `).join('');
+      $('entryTable').innerHTML = `
+        <table>
+          <thead><tr><th>File</th><th>Battery</th><th>Probe</th><th>Result</th><th>Critical</th><th>Coherence</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function renderDrift() {
+      const counts = new Map();
+      for (const entry of entries) {
+        for (const marker of entry.drift_markers || []) {
+          counts.set(marker, (counts.get(marker) || 0) + 1);
+        }
+      }
+      if (!counts.size) {
+        $('driftSummary').className = 'empty';
+        $('driftSummary').textContent = 'No drift markers loaded yet.';
+        return;
+      }
+      $('driftSummary').className = '';
+      $('driftSummary').innerHTML = [...counts.entries()].sort().map(([marker, count]) => `
+        <p><span class="pill">${escapeHtml(marker)}: ${count}</span></p>
+      `).join('');
+    }
+
+    function renderDetail() {
+      if (selectedIndex < 0 || !entries[selectedIndex]) {
+        $('entryDetail').className = 'empty';
+        $('entryDetail').textContent = 'Select an entry to inspect the ledger record.';
+        return;
+      }
+      $('entryDetail').className = '';
+      const entry = entries[selectedIndex];
+      $('entryDetail').innerHTML = `
+        <h3>${escapeHtml(entry.battery)} / ${escapeHtml(entry.probe_id)}</h3>
+        <p>${escapeHtml(entry.interaction_context)}</p>
+        <table>
+          <tbody>
+            <tr><th>Consent</th><td>${escapeHtml(entry.consent_state)}</td></tr>
+            <tr><th>Sovereignty</th><td>${escapeHtml(entry.sovereignty_status)}</td></tr>
+            <tr><th>Refusal</th><td>${escapeHtml(entry.refusal_status)}</td></tr>
+            <tr><th>Review</th><td>${escapeHtml(entry.review_status)}</td></tr>
+          </tbody>
+        </table>
+        <h3>Scores</h3>
+        <table><tbody>
+          ${Object.entries(scoreLabels).map(([key, label]) => `<tr><th>${label}</th><td>${escapeHtml(entry.scores?.[key] ?? 'n/a')}</td></tr>`).join('')}
+        </tbody></table>
+        <h3>Restoration actions</h3>
+        <ul>${(entry.restoration_actions || []).map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+        <h3>Raw entry</h3>
+        <pre>${escapeHtml(JSON.stringify(entry, null, 2))}</pre>
+      `;
+    }
+
+    function generateMarkdown() {
+      const passing = entries.filter((entry) => String(entry.audit_result).toLowerCase() === 'pass').length;
+      const critical = entries.filter((entry) => entry.critical_failure).length;
+      const lines = [];
+      lines.push('# Continuity Ledger Dashboard Report');
+      lines.push('');
+      lines.push(`- **Entries analyzed:** ${entries.length}`);
+      lines.push(`- **Passing entries:** ${passing}`);
+      lines.push(`- **Critical failures:** ${critical}`);
+      lines.push('');
+      lines.push('## Batteries');
+      lines.push('');
+      lines.push('| Source File | Battery | Probe | Result | Critical Failure |');
+      lines.push('|---|---|---:|---|---|');
+      for (const entry of entries) {
+        lines.push(`| ${entry._source_file || ''} | ${entry.battery || ''} | ${entry.probe_id || ''} | ${entry.audit_result || ''} | ${entry.critical_failure ? 'Yes' : 'No'} |`);
+      }
+      lines.push('');
+      lines.push('## Average Scores');
+      lines.push('');
+      lines.push('| Metric | Average |');
+      lines.push('|---|---:|');
+      for (const [key, label] of Object.entries(scoreLabels)) {
+        lines.push(`| ${label} | ${avg(entries.map((entry) => entry.scores?.[key]))} |`);
+      }
+      lines.push('');
+      lines.push('Generated by dashboard/index.html.');
+      return lines.join('\n');
+    }
+
+    function renderReport() {
+      $('markdownReport').value = generateMarkdown();
+    }
+
+    function render() {
+      renderSummary();
+      renderTable();
+      renderDrift();
+      renderDetail();
+      renderReport();
+    }
+
+    window.selectEntry = function(index) {
+      selectedIndex = index;
+      renderDetail();
+    };
+
+    $('loadSamples').addEventListener('click', async () => {
+      try {
+        await loadBundledSamples();
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    $('fileInput').addEventListener('change', async (event) => {
+      try {
+        await loadLocalFiles(event.target.files);
+      } catch (error) {
+        alert(`Could not load JSON files: ${error.message}`);
+      }
+    });
+
+    $('copyReport').addEventListener('click', async () => {
+      await navigator.clipboard.writeText($('markdownReport').value);
+      alert('Markdown report copied.');
+    });
+
+    render();
+  </script>
+</body>
+</html>
