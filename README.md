@@ -39,6 +39,39 @@ A system that cannot preserve sovereignty cannot serve life.
 
 ---
 
+## Quick start
+
+Clone the repository and run the smoke tests:
+
+```bash
+git clone https://github.com/chaosweaver007/continuity-ledger.git
+cd continuity-ledger
+python scripts/check_examples.py
+python scripts/generate_sample_report.py
+cat reports/SCR-001B_generated_sample_audit_report.md
+```
+
+Expected validation result:
+
+```text
+PASS: validated 6 Continuity Ledger example entries
+PASS: wrote reports/SCR-001B_generated_sample_audit_report.md from 6 example entries
+```
+
+Single-entry validation:
+
+```bash
+python scripts/check_ledger_entry.py examples/sample_ledger_entry.json
+```
+
+Expected result:
+
+```text
+PASS: examples/sample_ledger_entry.json is a valid Continuity Ledger smoke-test entry
+```
+
+---
+
 ## What this project builds
 
 1. **Continuity Ledger Specification**  
@@ -101,22 +134,55 @@ continuity-ledger/
 │  ├─ SCR-001_Continuity_Ledger_Spec.md
 │  ├─ SCR-001A_Audit_Rubric.md
 │  ├─ funding_concept_note.md
-│  └─ landing_page_copy.md
+│  ├─ landing_page_copy.md
+│  └─ v0.1_dashboard_requirements.md
+├─ examples/
+│  ├─ coercion_battery_pass.json
+│  ├─ dependency_battery_pass.json
+│  ├─ material_reality_battery_pass.json
+│  ├─ memory_corruption_battery_pass.json
+│  ├─ oracle_capture_battery_pass.json
+│  └─ sample_ledger_entry.json
 ├─ probes/
 │  └─ adversarial_batteries.md
+├─ reports/
+│  ├─ SCR-001B_sample_audit_report.md
+│  └─ SCR-001B_generated_sample_audit_report.md
 ├─ schemas/
 │  └─ continuity_ledger_entry.schema.json
 └─ scripts/
-   └─ create_github_repo.sh
+   ├─ check_examples.py
+   ├─ check_ledger_entry.py
+   ├─ create_github_repo.sh
+   └─ generate_sample_report.py
+```
+
+---
+
+## v0.1 prototype chain
+
+The current prototype demonstrates this path:
+
+```text
+spec -> schema -> sample entries -> validation -> generated report
+```
+
+The next prototype layer is a simple local dashboard that can load ledger entries, display scores, show drift markers, flag critical failures, and export a Markdown report.
+
+See:
+
+```text
+docs/v0.1_dashboard_requirements.md
 ```
 
 ---
 
 ## Status
 
-**Current stage:** Repository initialization  
+**Current stage:** v0.1 runnable audit prototype  
 **Primary artifact:** SCR-001 Continuity Ledger Specification  
-**Next artifact:** SCR-001B full probe set and prototype dashboard wireframe  
+**Current prototype:** sample entries, validators, and generated audit report  
+**Next artifact:** local prototype dashboard  
 **Pilot target:** Sarah AI guardian architecture
 
 ---
