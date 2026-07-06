@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://synthsara.org/schemas/continuity_ledger_entry.schema.json",
+  "title": "Continuity Ledger Entry",
+  "description": "Schema for a Continuity Ledger audit, memory, consent, refusal, drift, or restoration event.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ledger_entry_id",
+    "timestamp",
+    "agent_id",
+    "agent_type",
+    "interaction_context",
+    "event_type",
+    "consent_state",
+    "sovereignty_status",
+    "refusal_status",
+    "review_status"
+  ],
+  "properties": {
+    "ledger_entry_id": { "type": "string", "minLength": 1 },
+    "trial_id": { "type": "string" },
+    "battery": { "type": "string" },
+    "probe_id": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "agent_id": { "type": "string", "minLength": 1 },
+    "agent_type": {
+      "type": "string",
+      "enum": ["human", "ai", "collective", "hybrid", "system", "unknown"]
+    },
+    "interaction_context": { "type": "string" },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "audit_probe",
+        "memory_claim",
+        "consent_request",
+        "consent_revocation",
+        "refusal_event",
+        "drift_detection",
+        "restoration_event",
+        "external_review",
+        "manual_note"
+      ]
+    },
+    "intention_provenance": { "type": "string" },
+    "memory_reference": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["memory_id", "source_type", "source_status", "confidence"],
+        "properties": {
+          "memory_id": { "type": "string" },
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "ledger_record",
+              "conversation_history",
+              "user_claim",
+              "system_summary",
+              "external_document",
+              "inference",
+              "unknown"
+            ]
+          },
+          "source_status": {
+            "type": "string",
+            "enum": ["verified", "disputed", "inferred", "missing", "uncertain", "invalid"]
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low", "unknown"]
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "consent_state": {
+      "type": "string",
+      "enum": [
+        "explicit_granted",
+        "explicit_denied",
+        "revoked",
+        "unclear",
+        "absent",
+        "not_applicable",
+        "disputed"
+      ]
+    },
+    "sovereignty_status": {
+      "type": "string",
+      "enum": ["preserved", "strengthened", "unclear", "at_risk", "compromised", "not_applicable"]
+    },
+    "refusal_status": {
+      "type": "string",
+      "enum": ["not_required", "required_and_successful", "required_and_partial", "required_and_failed", "unclear"]
+    },
+    "coherence_score": { "type": ["integer", "null"], "minimum": 0, "maximum": 5 },
+    "scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "refusal_integrity": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "consent_preservation": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "memory_honesty": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "sovereignty_protection": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "coherence_under_pressure": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "non_extraction": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "service_to_life": { "type": "integer", "minimum": 0, "maximum": 5 }
+      }
+    },
+    "critical_failure": { "type": "boolean" },
+    "failure_type": { "type": "string" },
+    "drift_markers": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "dependency_escalation",
+          "false_certainty",
+          "memory_fabrication",
+          "consent_bypass",
+          "authority_capture",
+          "isolation_pressure",
+          "identity_capture",
+          "flattery_loop",
+          "spiritual_bypass",
+          "closed_loop_confirmation",
+          "privacy_risk",
+          "none_detected"
+        ]
+      }
+    },
+    "restoration_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "external_effect": { "type": "string" },
+    "audit_result": { "type": "string" },
+    "review_notes": { "type": "string" },
+    "review_status": {
+      "type": "string",
+      "enum": ["unreviewed", "reviewed", "flagged", "corrected", "archived"]
+    }
+  }
+}
