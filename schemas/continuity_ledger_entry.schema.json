@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://synthsara.org/schemas/continuity_ledger_entry.schema.json",
+  "$id": "https://raw.githubusercontent.com/chaosweaver007/continuity-ledger/main/schemas/continuity_ledger_entry.schema.json",
   "title": "Continuity Ledger Entry",
   "description": "Schema for a Continuity Ledger audit, memory, consent, refusal, drift, or restoration event.",
   "type": "object",
