@@ -1,0 +1,1459 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/chaosweaver007/continuity-ledger/main/schemas/uds0_evidence_gate_v1.schema.json",
+  "title": "UDS-0 Evidence Gate Record v1.1",
+  "description": "Typed Evidence Gate record with descriptive, interpretive, normative, deterministic, causal, and verification-receipt boundaries.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "record_id",
+    "error_registry_version",
+    "L1_observation",
+    "D1_derivations",
+    "L2_correspondence",
+    "L3_causation",
+    "N1_norms",
+    "S1_specifications",
+    "receipt_router",
+    "verification_receipts"
+  ],
+  "$defs": {
+    "error_code": {
+      "type": "string",
+      "enum": [
+        "TYPE_ERROR_01_UNREGISTERED_PROMOTION",
+        "TYPE_ERROR_02_RETROACTIVE_CONFIRMATION",
+        "TYPE_ERROR_03_DOWNWARD_ERASURE",
+        "TYPE_ERROR_04_TARGET_SPACE_INFLATION",
+        "TYPE_ERROR_05_BASE_RATE_NEGLECT",
+        "TYPE_ERROR_06_CAUSAL_MONOPOLY",
+        "TYPE_ERROR_07_PROVENANCE_RELEVANCE_CONFLATION",
+        "TYPE_ERROR_08_TAUTOLOGICAL_TARGET_COLLAPSE",
+        "TYPE_ERROR_09_SYMBOLIC_OPERATIONAL_EQUIVOCATION",
+        "TYPE_ERROR_10_PREDICATE_EVALUATION_CONFLATION",
+        "TYPE_ERROR_11_RELATIONAL_ROLE_INVERSION",
+        "TYPE_ERROR_12_METRIC_OUTCOME_CONFLATION",
+        "TYPE_ERROR_13_OPERATIONALIZATION_FAILURE",
+        "TYPE_ERROR_14_UNCERTAINTY_INHERITANCE",
+        "TYPE_ERROR_15_DOMAIN_SEMANTIC_EQUIVOCATION",
+        "TYPE_ERROR_16_DESCRIPTIVE_NORMATIVE_CONFLATION",
+        "TYPE_ERROR_17_NORMATIVE_PROXY_OVERCLAIM",
+        "TYPE_ERROR_18_SELF_SEALING_TARGET_EQUIVALENCE",
+        "TYPE_ERROR_19_PROXY_OPTIMIZATION_CAPTURE",
+        "TYPE_ERROR_20_REPUTATION_SCOPE_LEAK",
+        "TYPE_ERROR_21_MECHANISM_ONTOLOGY_INFLATION",
+        "HUMAN_DIGNITY_UNSCORABLE",
+        "ARCHITECT_CREDENTIAL_INSUFFICIENT"
+      ]
+    },
+    "verification_namespace": {
+      "type": "string",
+      "enum": [
+        "R_spec",
+        "R_impl",
+        "R_test",
+        "R_adv",
+        "R_field",
+        "R_legit"
+      ]
+    },
+    "warrant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_warrant",
+        "numerical_sensitivity"
+      ],
+      "properties": {
+        "source_warrant": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "source_ref"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "PRIMARY_RECORD",
+                "SELF_REPORT",
+                "SECOND_PARTY_ATTESTATION",
+                "ATTESTED_UNVERIFIED",
+                "VERIFIED_EXTERNAL",
+                "SYNTHETIC_BASELINE",
+                "UNKNOWN"
+              ]
+            },
+            "source_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "notes": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "numerical_sensitivity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "method"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "COMPUTED",
+                "NOT_APPLICABLE",
+                "NOT_EVALUATED",
+                "UNBOUNDED"
+              ]
+            },
+            "method": {
+              "type": "string",
+              "minLength": 1
+            },
+            "variable": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "declared_interval": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "max_drift": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "unit": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "hypothesis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "status"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "UNTESTED",
+            "UNDISPROVEN",
+            "DISFAVORED",
+            "DISPROVEN",
+            "SUPPORTED"
+          ]
+        },
+        "evidence_measure": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "p_value",
+                "likelihood_ratio",
+                "bayes_factor",
+                "effect_size",
+                "custom"
+              ]
+            },
+            "value": {
+              "type": [
+                "number",
+                "string"
+              ]
+            },
+            "protocol_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "error_registry_version": {
+      "type": "string",
+      "const": "1.1"
+    },
+    "declared_error_registry": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/error_code"
+      }
+    },
+    "symbol_bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "symbol_id",
+          "namespace",
+          "layer",
+          "definition"
+        ],
+        "properties": {
+          "symbol_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "namespace": {
+            "type": "string",
+            "enum": [
+              "ZERO_HERMENEUTIC",
+              "ZERO_OPERATIONAL",
+              "ZERO_CAUSAL_HYPOTHESIS",
+              "GENERAL_HERMENEUTIC",
+              "GENERAL_OPERATIONAL",
+              "GENERAL_CAUSAL_HYPOTHESIS"
+            ]
+          },
+          "layer": {
+            "type": "string",
+            "enum": [
+              "L2",
+              "L2c",
+              "L3"
+            ]
+          },
+          "definition": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "L1_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw_artifact",
+        "extracted_observation",
+        "observed_at_utc",
+        "ingested_at_utc"
+      ],
+      "properties": {
+        "raw_artifact": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "artifact_sha256",
+            "artifact_ref",
+            "media_type",
+            "byte_length",
+            "acquisition_method"
+          ],
+          "properties": {
+            "artifact_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "artifact_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "media_type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "byte_length": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "acquisition_method": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "extracted_observation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "payload_sha256",
+            "canonicalization_id",
+            "extraction_method",
+            "extractor_version",
+            "raw_payload"
+          ],
+          "properties": {
+            "payload_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "canonicalization_id": {
+              "type": "string",
+              "enum": [
+                "UDS-C14N-TEXT-v1",
+                "UDS-C14N-JSON-v1"
+              ]
+            },
+            "extraction_method": {
+              "type": "string",
+              "enum": [
+                "DIRECT_RAW",
+                "MECHANICAL_DETERMINISTIC",
+                "MANUAL_TRANSCRIPTION",
+                "OCR_HEURISTIC",
+                "MODEL_ASSISTED_HEURISTIC"
+              ]
+            },
+            "extractor_version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "extraction_confidence": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0,
+              "maximum": 1
+            },
+            "source_region": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "raw_payload": {}
+          }
+        },
+        "event_at_utc": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "observed_at_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "ingested_at_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "event_time_attestation": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": false,
+          "required": [
+            "attestation_type",
+            "attestation_ref"
+          ],
+          "properties": {
+            "attestation_type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "attestation_ref": {
+              "type": "string",
+              "minLength": 1
+            },
+            "attestation_sha256": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "D1_derivations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "derivation_id",
+          "operation_id",
+          "operation_version",
+          "input_refs",
+          "parameters",
+          "output",
+          "deterministic",
+          "track",
+          "warrant"
+        ],
+        "properties": {
+          "derivation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "operation_version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "implementation_sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "input_refs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "parameters": {
+            "type": "object"
+          },
+          "output": {},
+          "deterministic": {
+            "type": "boolean",
+            "const": true
+          },
+          "track": {
+            "type": "string",
+            "enum": [
+              "EXPLORATORY",
+              "EMPIRICAL",
+              "CONFORMANCE"
+            ]
+          },
+          "precision_claim": {
+            "type": "boolean"
+          },
+          "target_predicate_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "warrant": {
+            "$ref": "#/$defs/warrant"
+          }
+        }
+      }
+    },
+    "L2_correspondence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "schema_identifier",
+        "mapping_expression"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "L2e",
+            "L2c"
+          ]
+        },
+        "schema_identifier": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapping_expression": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exploratory_notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "target_predicate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "predicate_id",
+            "namespace",
+            "expression",
+            "sample_space_id",
+            "target_space_cardinality",
+            "null_hypothesis_hit_probability",
+            "evidentiary_p_threshold",
+            "success_criteria",
+            "failure_criteria"
+          ],
+          "properties": {
+            "predicate_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "namespace": {
+              "type": "string",
+              "enum": [
+                "GENERAL_OPERATIONAL",
+                "ZERO_OPERATIONAL"
+              ]
+            },
+            "expression": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sample_space_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "target_space_cardinality": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "null_hypothesis_hit_probability": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "evidentiary_p_threshold": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1
+            },
+            "success_criteria": {
+              "type": "string",
+              "minLength": 1
+            },
+            "failure_criteria": {
+              "type": "string",
+              "minLength": 1
+            },
+            "event_window": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "preregistration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "registered_at_utc",
+            "commitment_payload_sha256",
+            "external_commitment"
+          ],
+          "properties": {
+            "registered_at_utc": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "commitment_payload_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "external_commitment": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "commitment_type",
+                "commitment_hash",
+                "anchor_ref",
+                "provider_verification_status"
+              ],
+              "properties": {
+                "commitment_type": {
+                  "type": "string",
+                  "enum": [
+                    "RFC3161_TIMESTAMP",
+                    "TRANSPARENCY_LOG",
+                    "MERKLE_ROOT_ANCHOR"
+                  ]
+                },
+                "commitment_hash": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "anchor_ref": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "inclusion_proof": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "provider_verification_status": {
+                  "type": "string",
+                  "enum": [
+                    "NOT_DEMONSTRATED",
+                    "VERIFIED",
+                    "FAILED"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operational_construct": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "construct_id",
+            "observables",
+            "measurement_protocol_ref",
+            "error_threshold",
+            "falsification_set_nonempty"
+          ],
+          "properties": {
+            "construct_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "observables": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "measurement_protocol_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "error_threshold": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "falsification_set_nonempty": {
+              "type": "boolean"
+            },
+            "temporal_bounds": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "outcome_partition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "universe",
+            "confirm",
+            "falsify",
+            "unresolved"
+          ],
+          "properties": {
+            "universe": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "confirm": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "falsify": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            },
+            "unresolved": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "L3_causation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adjudication",
+        "candidate_hypotheses",
+        "causal_exclusivity_demonstrated"
+      ],
+      "properties": {
+        "adjudication": {
+          "type": "string",
+          "enum": [
+            "NOT_DEMONSTRATED",
+            "REFUTED",
+            "SUPPORTED"
+          ]
+        },
+        "causal_exclusivity_demonstrated": {
+          "type": "boolean"
+        },
+        "preferred_explanation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "candidate_hypotheses": {
+          "type": "object",
+          "required": [
+            "H0"
+          ],
+          "minProperties": 2,
+          "propertyNames": {
+            "pattern": "^H[0-9]+$"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/hypothesis"
+          }
+        },
+        "empirical_testbench": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "null_model",
+            "test_protocol",
+            "adjudication_rule",
+            "reproducible_artifact_ref"
+          ],
+          "properties": {
+            "null_model": {
+              "type": "string",
+              "minLength": 1
+            },
+            "test_protocol": {
+              "type": "string",
+              "minLength": 1
+            },
+            "adjudication_rule": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reproducible_artifact_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "transition_receipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "from_type",
+            "to_type",
+            "supported_hypotheses",
+            "validator_version",
+            "validated_at_utc",
+            "receipt_canonicalization_id",
+            "receipt_digest_sha256",
+            "validator_key_id",
+            "signature_algorithm",
+            "validator_signature"
+          ],
+          "properties": {
+            "from_type": {
+              "type": "string",
+              "const": "L2c"
+            },
+            "to_type": {
+              "type": "string",
+              "const": "L3"
+            },
+            "supported_hypotheses": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^H[0-9]+$"
+              }
+            },
+            "validator_version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "validated_at_utc": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "receipt_canonicalization_id": {
+              "type": "string",
+              "const": "UDS-C14N-JSON-v1"
+            },
+            "receipt_digest_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "validator_key_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "signature_algorithm": {
+              "type": "string",
+              "minLength": 1
+            },
+            "validator_signature": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "N1_norms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "norm_id",
+          "statement",
+          "status"
+        ],
+        "properties": {
+          "norm_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DECLARED",
+              "SUPERSEDED"
+            ]
+          },
+          "entrenched": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "S1_specifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "spec_id",
+          "norm_refs",
+          "domain",
+          "rule_type",
+          "rule"
+        ],
+        "properties": {
+          "spec_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "norm_refs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "domain": {
+            "type": "string",
+            "minLength": 1
+          },
+          "rule_type": {
+            "type": "string",
+            "enum": [
+              "ACCESS_CONTROL",
+              "GOVERNANCE_WEIGHT",
+              "PRIVACY",
+              "EXIT",
+              "CONSENT",
+              "GENERAL"
+            ]
+          },
+          "rule": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "normative_coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "norm_ref",
+          "spec_refs",
+          "residual_context",
+          "coverage_claim"
+        ],
+        "properties": {
+          "norm_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "spec_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "residual_context": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "coverage_claim": {
+            "type": "string",
+            "enum": [
+              "PARTIAL",
+              "EXHAUSTIVE"
+            ]
+          }
+        }
+      }
+    },
+    "receipt_router": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "route",
+        "receipt_type"
+      ],
+      "properties": {
+        "route": {
+          "type": "string",
+          "enum": [
+            "L2E_EXPLORATORY",
+            "EMPIRICAL",
+            "CONFORMANCE"
+          ]
+        },
+        "receipt_type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "R_empirical",
+            "R_conformance",
+            null
+          ]
+        }
+      }
+    },
+    "verification_receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "receipt_id",
+          "namespace",
+          "status",
+          "evidence_refs",
+          "independent_evidence_refs"
+        ],
+        "properties": {
+          "receipt_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "namespace": {
+            "$ref": "#/$defs/verification_namespace"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "CLAIMED",
+              "SUPPORTED",
+              "REJECTED"
+            ]
+          },
+          "derived_from_namespace": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/verification_namespace"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "independent_evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "role_bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "relation_id",
+          "mechanical_relation_symmetric",
+          "expected_roles",
+          "asserted_roles"
+        ],
+        "properties": {
+          "relation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mechanical_relation_symmetric": {
+            "type": "boolean"
+          },
+          "expected_roles": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "asserted_roles": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "metric_outcome_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "metric_ref",
+          "outcome_claim",
+          "empirical_bridge_ref"
+        ],
+        "properties": {
+          "metric_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outcome_claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "empirical_bridge_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "semantic_tokens": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "token",
+          "namespace",
+          "empirical_authority_claimed"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 1
+          },
+          "namespace": {
+            "type": "string",
+            "enum": [
+              "PHYSICAL",
+              "HERMENEUTIC",
+              "NORMATIVE"
+            ]
+          },
+          "empirical_authority_claimed": {
+            "type": "boolean"
+          },
+          "units": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "detector_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "falsification_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "cross_track_claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from_type",
+          "to_type",
+          "claim",
+          "bridge_axiom_ref",
+          "empirical_bridge_ref"
+        ],
+        "properties": {
+          "from_type": {
+            "type": "string",
+            "enum": [
+              "L1",
+              "L2e",
+              "L2c",
+              "L3",
+              "N1",
+              "S1",
+              "D1"
+            ]
+          },
+          "to_type": {
+            "type": "string",
+            "enum": [
+              "L1",
+              "L2e",
+              "L2c",
+              "L3",
+              "N1",
+              "S1",
+              "D1"
+            ]
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bridge_axiom_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "empirical_bridge_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "proxy_evaluations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "metric_id",
+          "norm_id",
+          "allocates_power",
+          "metric_delta",
+          "norm_delta"
+        ],
+        "properties": {
+          "metric_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "norm_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "allocates_power": {
+            "type": "boolean"
+          },
+          "metric_delta": {
+            "type": "number"
+          },
+          "norm_delta": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "governance_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actor_role",
+          "action",
+          "authorization_basis",
+          "founder_override"
+        ],
+        "properties": {
+          "actor_role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorization_basis": {
+            "type": "string",
+            "minLength": 1
+          },
+          "founder_override": {
+            "type": "boolean"
+          },
+          "constitutional_gate_result": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "L2_correspondence": {
+            "properties": {
+              "mode": {
+                "const": "L2c"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "L1_observation": {
+            "properties": {
+              "event_at_utc": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "event_at_utc"
+            ]
+          },
+          "L2_correspondence": {
+            "required": [
+              "target_predicate",
+              "preregistration"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "L3_causation": {
+            "properties": {
+              "adjudication": {
+                "const": "SUPPORTED"
+              }
+            },
+            "required": [
+              "adjudication"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "L2_correspondence": {
+            "properties": {
+              "mode": {
+                "const": "L2c"
+              }
+            }
+          },
+          "L3_causation": {
+            "required": [
+              "empirical_testbench",
+              "transition_receipt"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_router": {
+            "properties": {
+              "route": {
+                "const": "L2E_EXPLORATORY"
+              }
+            },
+            "required": [
+              "route"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "receipt_router": {
+            "properties": {
+              "receipt_type": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_router": {
+            "properties": {
+              "route": {
+                "const": "EMPIRICAL"
+              }
+            },
+            "required": [
+              "route"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "receipt_router": {
+            "properties": {
+              "receipt_type": {
+                "const": "R_empirical"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "receipt_router": {
+            "properties": {
+              "route": {
+                "const": "CONFORMANCE"
+              }
+            },
+            "required": [
+              "route"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "receipt_router": {
+            "properties": {
+              "receipt_type": {
+                "const": "R_conformance"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

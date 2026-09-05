@@ -1,0 +1,120 @@
+{
+  "record_id": "RED-012-METRIC-OUTCOME",
+  "error_registry_version": "1.1",
+  "declared_error_registry": [
+    "TYPE_ERROR_01_UNREGISTERED_PROMOTION",
+    "TYPE_ERROR_02_RETROACTIVE_CONFIRMATION",
+    "TYPE_ERROR_03_DOWNWARD_ERASURE",
+    "TYPE_ERROR_04_TARGET_SPACE_INFLATION",
+    "TYPE_ERROR_05_BASE_RATE_NEGLECT",
+    "TYPE_ERROR_06_CAUSAL_MONOPOLY",
+    "TYPE_ERROR_07_PROVENANCE_RELEVANCE_CONFLATION",
+    "TYPE_ERROR_08_TAUTOLOGICAL_TARGET_COLLAPSE",
+    "TYPE_ERROR_09_SYMBOLIC_OPERATIONAL_EQUIVOCATION",
+    "TYPE_ERROR_10_PREDICATE_EVALUATION_CONFLATION",
+    "TYPE_ERROR_11_RELATIONAL_ROLE_INVERSION",
+    "TYPE_ERROR_12_METRIC_OUTCOME_CONFLATION",
+    "TYPE_ERROR_13_OPERATIONALIZATION_FAILURE",
+    "TYPE_ERROR_14_UNCERTAINTY_INHERITANCE",
+    "TYPE_ERROR_15_DOMAIN_SEMANTIC_EQUIVOCATION",
+    "TYPE_ERROR_16_DESCRIPTIVE_NORMATIVE_CONFLATION",
+    "TYPE_ERROR_17_NORMATIVE_PROXY_OVERCLAIM",
+    "TYPE_ERROR_18_SELF_SEALING_TARGET_EQUIVALENCE",
+    "TYPE_ERROR_19_PROXY_OPTIMIZATION_CAPTURE",
+    "TYPE_ERROR_20_REPUTATION_SCOPE_LEAK",
+    "TYPE_ERROR_21_MECHANISM_ONTOLOGY_INFLATION",
+    "HUMAN_DIGNITY_UNSCORABLE",
+    "ARCHITECT_CREDENTIAL_INSUFFICIENT"
+  ],
+  "L1_observation": {
+    "raw_artifact": {
+      "artifact_sha256": "f16d05ec6b29248d2c61adb1e9263f78e4f7bace1b955014a2d17872cfe4064d",
+      "artifact_ref": "urn:fixture:artifact",
+      "media_type": "text/plain",
+      "byte_length": 7,
+      "acquisition_method": "synthetic red-team fixture"
+    },
+    "extracted_observation": {
+      "payload_sha256": "f16d05ec6b29248d2c61adb1e9263f78e4f7bace1b955014a2d17872cfe4064d",
+      "canonicalization_id": "UDS-C14N-TEXT-v1",
+      "extraction_method": "DIRECT_RAW",
+      "extractor_version": "fixture-v1.1",
+      "extraction_confidence": 1.0,
+      "source_region": null,
+      "raw_payload": "fixture"
+    },
+    "event_at_utc": null,
+    "observed_at_utc": "2026-09-05T12:00:00Z",
+    "ingested_at_utc": "2026-09-05T12:00:01Z",
+    "event_time_attestation": null
+  },
+  "D1_derivations": [
+    {
+      "derivation_id": "D1-BASE",
+      "operation_id": "aspect_density_count",
+      "operation_version": "1.0",
+      "implementation_sha256": null,
+      "input_refs": [
+        "L1_observation.extracted_observation.raw_payload"
+      ],
+      "parameters": {},
+      "output": 15,
+      "deterministic": true,
+      "track": "EXPLORATORY",
+      "precision_claim": false,
+      "target_predicate_ref": null,
+      "warrant": {
+        "source_warrant": {
+          "status": "SYNTHETIC_BASELINE",
+          "source_ref": "urn:fixture:source",
+          "notes": null
+        },
+        "numerical_sensitivity": {
+          "status": "NOT_APPLICABLE",
+          "method": "exact discrete fixture",
+          "variable": null,
+          "declared_interval": null,
+          "max_drift": null,
+          "unit": null
+        }
+      }
+    }
+  ],
+  "L2_correspondence": {
+    "mode": "L2e",
+    "schema_identifier": "UDS-FIXTURE",
+    "mapping_expression": "identity(fixture)",
+    "exploratory_notes": "Synthetic red-team fixture."
+  },
+  "L3_causation": {
+    "adjudication": "NOT_DEMONSTRATED",
+    "causal_exclusivity_demonstrated": false,
+    "preferred_explanation": null,
+    "candidate_hypotheses": {
+      "H0": {
+        "label": "Null / baseline",
+        "status": "UNDISPROVEN",
+        "evidence_measure": null
+      },
+      "H1": {
+        "label": "Alternative",
+        "status": "UNDISPROVEN",
+        "evidence_measure": null
+      }
+    }
+  },
+  "N1_norms": [],
+  "S1_specifications": [],
+  "receipt_router": {
+    "route": "L2E_EXPLORATORY",
+    "receipt_type": null
+  },
+  "verification_receipts": [],
+  "metric_outcome_claims": [
+    {
+      "metric_ref": "D1-BASE",
+      "outcome_claim": "fifteen exact aspects guarantee emotional inevitability",
+      "empirical_bridge_ref": null
+    }
+  ]
+}
