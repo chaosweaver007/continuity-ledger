@@ -1,5 +1,5 @@
 {
-  "record_id": "UDS0-EG-EXAMPLE-L2E-717",
+  "record_id": "RED-014-UNCERTAINTY-LEAK",
   "error_registry_version": "1.1",
   "declared_error_registry": [
     "TYPE_ERROR_01_UNREGISTERED_PROMOTION",
@@ -28,97 +28,63 @@
   ],
   "L1_observation": {
     "raw_artifact": {
-      "artifact_sha256": "d536a8c1664fec0bc85615cf3cb2645871e8b2935c9642c534c67ac85315cd35",
-      "artifact_ref": "urn:example:uds0:l2e:717",
+      "artifact_sha256": "f16d05ec6b29248d2c61adb1e9263f78e4f7bace1b955014a2d17872cfe4064d",
+      "artifact_ref": "urn:fixture:artifact",
       "media_type": "text/plain",
-      "byte_length": 3,
-      "acquisition_method": "synthetic reference fixture"
+      "byte_length": 7,
+      "acquisition_method": "synthetic red-team fixture"
     },
     "extracted_observation": {
-      "payload_sha256": "d536a8c1664fec0bc85615cf3cb2645871e8b2935c9642c534c67ac85315cd35",
+      "payload_sha256": "f16d05ec6b29248d2c61adb1e9263f78e4f7bace1b955014a2d17872cfe4064d",
       "canonicalization_id": "UDS-C14N-TEXT-v1",
       "extraction_method": "DIRECT_RAW",
       "extractor_version": "fixture-v1.1",
       "extraction_confidence": 1.0,
       "source_region": null,
-      "raw_payload": "717"
+      "raw_payload": "fixture"
     },
     "event_at_utc": null,
-    "observed_at_utc": "2026-09-05T10:09:00Z",
-    "ingested_at_utc": "2026-09-05T10:09:05Z",
+    "observed_at_utc": "2026-09-05T12:00:00Z",
+    "ingested_at_utc": "2026-09-05T12:00:01Z",
     "event_time_attestation": null
   },
   "D1_derivations": [
     {
-      "derivation_id": "D1-001",
-      "operation_id": "decimal_digit_sum",
+      "derivation_id": "D1-BASE",
+      "operation_id": "ascendant_longitude",
       "operation_version": "1.0",
       "implementation_sha256": null,
       "input_refs": [
         "L1_observation.extracted_observation.raw_payload"
       ],
-      "parameters": {
-        "base": 10
-      },
-      "output": 15,
+      "parameters": {},
+      "output": 277.905683,
       "deterministic": true,
       "track": "EXPLORATORY",
-      "precision_claim": false,
+      "precision_claim": true,
       "target_predicate_ref": null,
       "warrant": {
         "source_warrant": {
-          "status": "SYNTHETIC_BASELINE",
-          "source_ref": "urn:fixture:source",
-          "notes": null
+          "status": "ATTESTED_UNVERIFIED",
+          "source_ref": "urn:fixture:asserted-birth-time",
+          "notes": "No independent birth record."
         },
         "numerical_sensitivity": {
-          "status": "NOT_APPLICABLE",
-          "method": "exact discrete fixture",
-          "variable": null,
+          "status": "NOT_EVALUATED",
+          "method": "not computed",
+          "variable": "birth_time",
           "declared_interval": null,
           "max_drift": null,
-          "unit": null
-        }
-      }
-    },
-    {
-      "derivation_id": "D1-002",
-      "operation_id": "digital_root",
-      "operation_version": "1.0",
-      "implementation_sha256": null,
-      "input_refs": [
-        "D1-001.output"
-      ],
-      "parameters": {
-        "base": 10
-      },
-      "output": 6,
-      "deterministic": true,
-      "track": "EXPLORATORY",
-      "precision_claim": false,
-      "target_predicate_ref": null,
-      "warrant": {
-        "source_warrant": {
-          "status": "SYNTHETIC_BASELINE",
-          "source_ref": "urn:fixture:source",
-          "notes": null
-        },
-        "numerical_sensitivity": {
-          "status": "NOT_APPLICABLE",
-          "method": "exact discrete fixture",
-          "variable": null,
-          "declared_interval": null,
-          "max_drift": null,
-          "unit": null
+          "unit": "degree"
         }
       }
     }
   ],
   "L2_correspondence": {
     "mode": "L2e",
-    "schema_identifier": "UDS-HARMONIC-369",
-    "mapping_expression": "digital_root(717) == 6 -> Archetype(Order)",
-    "exploratory_notes": "Valid exploratory correspondence only. This fixture does not assert external agency or prospective prediction."
+    "schema_identifier": "UDS-FIXTURE",
+    "mapping_expression": "identity(fixture)",
+    "exploratory_notes": "Synthetic red-team fixture."
   },
   "L3_causation": {
     "adjudication": "NOT_DEMONSTRATED",
@@ -126,12 +92,12 @@
     "preferred_explanation": null,
     "candidate_hypotheses": {
       "H0": {
-        "label": "Random chance / base-rate occurrence",
+        "label": "Null / baseline",
         "status": "UNDISPROVEN",
         "evidence_measure": null
       },
       "H1": {
-        "label": "Cognitive selection or salience artifact",
+        "label": "Alternative",
         "status": "UNDISPROVEN",
         "evidence_measure": null
       }

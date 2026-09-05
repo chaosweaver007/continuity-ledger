@@ -1,5 +1,5 @@
 {
-  "record_id": "UDS0-EG-FAIL-TAUTOLOGICAL-TARGET",
+  "record_id": "RED-013-UNOPERATIONALIZED",
   "error_registry_version": "1.1",
   "declared_error_registry": [
     "TYPE_ERROR_01_UNREGISTERED_PROMOTION",
@@ -28,24 +28,24 @@
   ],
   "L1_observation": {
     "raw_artifact": {
-      "artifact_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
-      "artifact_ref": "urn:example:uds0:failure:tautological-target",
+      "artifact_sha256": "f16d05ec6b29248d2c61adb1e9263f78e4f7bace1b955014a2d17872cfe4064d",
+      "artifact_ref": "urn:fixture:artifact",
       "media_type": "text/plain",
-      "byte_length": 1,
+      "byte_length": 7,
       "acquisition_method": "synthetic red-team fixture"
     },
     "extracted_observation": {
-      "payload_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "payload_sha256": "f16d05ec6b29248d2c61adb1e9263f78e4f7bace1b955014a2d17872cfe4064d",
       "canonicalization_id": "UDS-C14N-TEXT-v1",
       "extraction_method": "DIRECT_RAW",
       "extractor_version": "fixture-v1.1",
       "extraction_confidence": 1.0,
       "source_region": null,
-      "raw_payload": "x"
+      "raw_payload": "fixture"
     },
     "event_at_utc": "2026-09-06T00:00:00Z",
-    "observed_at_utc": "2026-09-06T00:00:01Z",
-    "ingested_at_utc": "2026-09-06T00:00:02Z",
+    "observed_at_utc": "2026-09-05T12:00:00Z",
+    "ingested_at_utc": "2026-09-05T12:00:01Z",
     "event_time_attestation": {
       "attestation_type": "synthetic_fixture_clock",
       "attestation_ref": "urn:fixture:clock"
@@ -53,7 +53,7 @@
   },
   "D1_derivations": [
     {
-      "derivation_id": "D1-SCORE-001",
+      "derivation_id": "D1-BASE",
       "operation_id": "predicate_membership",
       "operation_version": "1.0",
       "implementation_sha256": null,
@@ -65,7 +65,7 @@
       "deterministic": true,
       "track": "EMPIRICAL",
       "precision_claim": false,
-      "target_predicate_ref": "S0-UNIVERSAL",
+      "target_predicate_ref": "S0-FIXTURE",
       "warrant": {
         "source_warrant": {
           "status": "SYNTHETIC_BASELINE",
@@ -85,31 +85,39 @@
   ],
   "L2_correspondence": {
     "mode": "L2c",
-    "schema_identifier": "UDS-ZERO-REDTEAM",
-    "mapping_expression": "x in Omega",
-    "exploratory_notes": null,
+    "schema_identifier": "UDS-FIXTURE",
+    "mapping_expression": "identity(fixture)",
+    "exploratory_notes": "Synthetic red-team fixture.",
     "target_predicate": {
-      "predicate_id": "S0-UNIVERSAL",
+      "predicate_id": "S0-FIXTURE",
       "namespace": "GENERAL_OPERATIONAL",
-      "expression": "x in Omega",
-      "sample_space_id": "Omega",
+      "expression": "payload == fixture",
+      "sample_space_id": "fixture-space",
       "target_space_cardinality": 1,
-      "null_hypothesis_hit_probability": 1.0,
+      "null_hypothesis_hit_probability": 0.01,
       "evidentiary_p_threshold": 0.05,
-      "success_criteria": "Any possible observation occurs",
-      "failure_criteria": "No possible failure state",
+      "success_criteria": "payload equals fixture",
+      "failure_criteria": "payload differs from fixture",
       "event_window": "2026-09-06"
     },
     "preregistration": {
       "registered_at_utc": "2026-09-05T00:00:00Z",
-      "commitment_payload_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "commitment_payload_sha256": "f16d05ec6b29248d2c61adb1e9263f78e4f7bace1b955014a2d17872cfe4064d",
       "external_commitment": {
         "commitment_type": "MERKLE_ROOT_ANCHOR",
-        "commitment_hash": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
-        "anchor_ref": "urn:example:anchor:tautological-target",
+        "commitment_hash": "f16d05ec6b29248d2c61adb1e9263f78e4f7bace1b955014a2d17872cfe4064d",
+        "anchor_ref": "urn:fixture:anchor",
         "inclusion_proof": null,
         "provider_verification_status": "VERIFIED"
       }
+    },
+    "operational_construct": {
+      "construct_id": "karmic-telepathy",
+      "observables": [],
+      "measurement_protocol_ref": null,
+      "error_threshold": null,
+      "falsification_set_nonempty": false,
+      "temporal_bounds": null
     }
   },
   "L3_causation": {
@@ -118,13 +126,13 @@
     "preferred_explanation": null,
     "candidate_hypotheses": {
       "H0": {
-        "label": "Universal target is guaranteed under the null",
-        "status": "SUPPORTED",
+        "label": "Null / baseline",
+        "status": "UNDISPROVEN",
         "evidence_measure": null
       },
       "H1": {
-        "label": "Claimed anomalous mechanism",
-        "status": "UNTESTED",
+        "label": "Alternative",
+        "status": "UNDISPROVEN",
         "evidence_measure": null
       }
     }
@@ -135,13 +143,5 @@
     "route": "EMPIRICAL",
     "receipt_type": "R_empirical"
   },
-  "verification_receipts": [],
-  "symbol_bindings": [
-    {
-      "symbol_id": "0_H",
-      "namespace": "ZERO_HERMENEUTIC",
-      "layer": "L2",
-      "definition": "Omega / universal possibility space"
-    }
-  ]
+  "verification_receipts": []
 }
