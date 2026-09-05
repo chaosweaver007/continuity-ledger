@@ -1,0 +1,96 @@
+{
+  "record_id": "UDS0-EG-FAIL-TAUTOLOGICAL-TARGET",
+  "error_registry_version": "1.0",
+  "symbol_bindings": [
+    {
+      "symbol_id": "0_H",
+      "namespace": "ZERO_HERMENEUTIC",
+      "layer": "L2",
+      "definition": "Omega / universal possibility space"
+    }
+  ],
+  "L1_observation": {
+    "raw_artifact": {
+      "artifact_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "artifact_ref": "urn:example:uds0:failure:tautological-target",
+      "media_type": "text/plain",
+      "byte_length": 1,
+      "acquisition_method": "synthetic red-team fixture"
+    },
+    "extracted_observation": {
+      "payload_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "canonicalization_id": "UDS-C14N-TEXT-v1",
+      "extraction_method": "DIRECT_RAW",
+      "extractor_version": "fixture-v1",
+      "extraction_confidence": 1.0,
+      "source_region": null,
+      "raw_payload": "x"
+    },
+    "event_at_utc": "2026-09-06T00:00:00Z",
+    "observed_at_utc": "2026-09-06T00:00:01Z",
+    "ingested_at_utc": "2026-09-06T00:00:02Z",
+    "event_time_attestation": {
+      "attestation_type": "synthetic_fixture_clock",
+      "attestation_ref": "urn:example:clock:2026-09-06"
+    }
+  },
+  "D1_derivations": [
+    {
+      "derivation_id": "D1-SCORE-001",
+      "operation_id": "predicate_membership",
+      "operation_version": "1.0",
+      "implementation_sha256": null,
+      "input_refs": ["L1_observation.extracted_observation.raw_payload"],
+      "parameters": {},
+      "output": true,
+      "deterministic": true,
+      "target_predicate_ref": "S0-UNIVERSAL"
+    }
+  ],
+  "L2_correspondence": {
+    "mode": "L2c",
+    "schema_identifier": "UDS-ZERO-REDTEAM",
+    "mapping_expression": "x in Omega",
+    "exploratory_notes": null,
+    "target_predicate": {
+      "predicate_id": "S0-UNIVERSAL",
+      "namespace": "GENERAL_OPERATIONAL",
+      "expression": "x in Omega",
+      "sample_space_id": "Omega",
+      "target_space_cardinality": 1,
+      "null_hypothesis_hit_probability": 1.0,
+      "evidentiary_p_threshold": 0.05,
+      "success_criteria": "Any possible observation occurs",
+      "failure_criteria": "No possible failure state",
+      "event_window": "2026-09-06"
+    },
+    "preregistration": {
+      "registered_at_utc": "2026-09-05T00:00:00Z",
+      "commitment_payload_sha256": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+      "external_commitment": {
+        "commitment_type": "MERKLE_ROOT_ANCHOR",
+        "commitment_hash": "2d711642b726b04401627ca9fbac32f5c8530fb1903cc4db02258717921a4881",
+        "anchor_ref": "urn:example:anchor:tautological-target",
+        "inclusion_proof": null,
+        "provider_verification_status": "VERIFIED"
+      }
+    }
+  },
+  "L3_causation": {
+    "adjudication": "NOT_DEMONSTRATED",
+    "causal_exclusivity_demonstrated": false,
+    "preferred_explanation": null,
+    "candidate_hypotheses": {
+      "H0": {
+        "label": "Universal target is guaranteed under the null",
+        "status": "SUPPORTED",
+        "evidence_measure": null
+      },
+      "H1": {
+        "label": "Claimed anomalous mechanism",
+        "status": "UNTESTED",
+        "evidence_measure": null
+      }
+    }
+  }
+}
