@@ -193,3 +193,8 @@ Seed target: **$50,000**
 Pilot target: **$150,000 to $250,000**
 
 Seed funding supports the specification, repository, prototype dashboard, first audit suite, public documentation, and pilot report.
+
+
+## Signed execution boundary
+
+See [GZ-EXEC-001](docs/GZ-EXEC-001.md) for the Ed25519 governance-to-execution bridge, schemas, durable replay journal, signed receipts, tests, and deployment requirements. This reference API requires explicit trusted-policy integration.
